@@ -14,7 +14,7 @@ MySQL - 10.4.32-MariaDB : Database - db_tls
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`db_tls` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 
-USE `db_tls`;
+USE `db_20-138`;
 
 /*Table structure for table `anggota` */
 
@@ -39,11 +39,11 @@ CREATE TABLE `buku` (
   `Kode Buku` INT(11) NOT NULL AUTO_INCREMENT,
   `Judul Buku` VARCHAR(255) NOT NULL,
   `Penulis` VARCHAR(255) NOT NULL,
-  `Penerbit` varchar(255) NOT NULL,
-  `Tahun Terbit` year(4) NOT NULL,
-  `Genre` varchar(255) NOT NULL,
+  `Penerbit` VARCHAR(255) NOT NULL,
+  `Tahun Terbit` YEAR(4) NOT NULL,
+  `Genre` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`Kode Buku`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `buku` */
 
@@ -52,20 +52,20 @@ CREATE TABLE `buku` (
 DROP TABLE IF EXISTS `inventory`;
 
 CREATE TABLE `inventory` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) unsigned NOT NULL,
-  `month` int(11) NOT NULL,
-  `year` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id` INT(10) UNSIGNED NOT NULL,
+  `month` INT(11) NOT NULL,
+  `year` INT(11) NOT NULL,
+  `quantity` INT(11) NOT NULL,
+  `date` DATE NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `inventory` */
 
-insert  into `inventory`(`id`,`product_id`,`month`,`year`,`quantity`,`date`) values 
+INSERT  INTO `inventory`(`id`,`product_id`,`month`,`year`,`quantity`,`date`) VALUES 
 (1,2,1,2016,3070,'2016-01-05'),
 (2,2,2,2016,2905,'2016-02-05'),
 (3,2,3,2016,3046,'2016-03-05'),
@@ -109,16 +109,16 @@ insert  into `inventory`(`id`,`product_id`,`month`,`year`,`quantity`,`date`) val
 DROP TABLE IF EXISTS `m2_buku`;
 
 CREATE TABLE `m2_buku` (
-  `Kode_buku` varchar(10) NOT NULL,
-  `Judul_buku` varchar(25) NOT NULL,
-  `Pengarang_buku` varchar(30) NOT NULL,
-  `Penerbit_buku` varchar(30) NOT NULL,
-  `Tahun_buku` varchar(10) NOT NULL,
-  `Jumlah_buku` varchar(5) NOT NULL,
-  `Status_buku` varchar(10) NOT NULL,
-  `Klasifikasi_buku` varchar(20) NOT NULL,
+  `Kode_buku` VARCHAR(10) NOT NULL,
+  `Judul_buku` VARCHAR(25) NOT NULL,
+  `Pengarang_buku` VARCHAR(30) NOT NULL,
+  `Penerbit_buku` VARCHAR(30) NOT NULL,
+  `Tahun_buku` VARCHAR(10) NOT NULL,
+  `Jumlah_buku` VARCHAR(5) NOT NULL,
+  `Status_buku` VARCHAR(10) NOT NULL,
+  `Klasifikasi_buku` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`Kode_buku`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `m2_buku` */
 
@@ -127,16 +127,16 @@ CREATE TABLE `m2_buku` (
 DROP TABLE IF EXISTS `product`;
 
 CREATE TABLE `product` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(100) NOT NULL,
-  `name` varchar(200) NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `code` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `product` */
 
-insert  into `product`(`id`,`code`,`name`) values 
+INSERT  INTO `product`(`id`,`code`,`name`) VALUES 
 (2,'300454','NABATI RCE 8g'),
 (4,'300458','NABATI RCE 50g'),
 (5,'301234','NABATI RCO 8g'),
@@ -149,20 +149,20 @@ insert  into `product`(`id`,`code`,`name`) values
 DROP TABLE IF EXISTS `sale`;
 
 CREATE TABLE `sale` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) unsigned NOT NULL,
-  `month` int(10) NOT NULL,
-  `year` int(10) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id` INT(10) UNSIGNED NOT NULL,
+  `month` INT(10) NOT NULL,
+  `year` INT(10) NOT NULL,
+  `quantity` INT(11) NOT NULL,
+  `date` DATE NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `sale_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `sale` */
 
-insert  into `sale`(`id`,`product_id`,`month`,`year`,`quantity`,`date`) values 
+INSERT  INTO `sale`(`id`,`product_id`,`month`,`year`,`quantity`,`date`) VALUES 
 (1,2,1,2016,3070,'2016-01-05'),
 (2,2,2,2016,2905,'2016-02-05'),
 (3,2,3,2016,3046,'2016-03-05'),
@@ -206,15 +206,15 @@ insert  into `sale`(`id`,`product_id`,`month`,`year`,`quantity`,`date`) values
 DROP TABLE IF EXISTS `table_groups`;
 
 CREATE TABLE `table_groups` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(20) NOT NULL,
+  `description` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=INNODB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `table_groups` */
 
-insert  into `table_groups`(`id`,`name`,`description`) values 
+INSERT  INTO `table_groups`(`id`,`name`,`description`) VALUES 
 (1,'admin','Administrator'),
 (2,'user','General User'),
 (3,'manager','manager');
@@ -224,17 +224,17 @@ insert  into `table_groups`(`id`,`name`,`description`) values
 DROP TABLE IF EXISTS `table_log`;
 
 CREATE TABLE `table_log` (
-  `log_id` int(11) NOT NULL AUTO_INCREMENT,
-  `log_action` text NOT NULL,
-  `log_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `log_ipaddress` varchar(20) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `log_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `log_action` TEXT NOT NULL,
+  `log_datetime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+  `log_ipaddress` VARCHAR(20) NOT NULL,
+  `user_id` INT(11) NOT NULL,
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=309 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=309 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `table_log` */
 
-insert  into `table_log`(`log_id`,`log_action`,`log_datetime`,`log_ipaddress`,`user_id`) values 
+INSERT  INTO `table_log`(`log_id`,`log_action`,`log_datetime`,`log_ipaddress`,`user_id`) VALUES 
 (1,'add data user','2018-07-13 17:28:10','::1',1),
 (2,'update data skpd','2018-07-13 17:39:14','::1',1),
 (3,'add data userprofile','2018-07-16 10:25:17','::1',1),
@@ -549,12 +549,12 @@ insert  into `table_log`(`log_id`,`log_action`,`log_datetime`,`log_ipaddress`,`u
 DROP TABLE IF EXISTS `table_login_attempts`;
 
 CREATE TABLE `table_login_attempts` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(45) NOT NULL,
-  `login` varchar(100) NOT NULL,
-  `time` int(11) unsigned DEFAULT NULL,
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ip_address` VARCHAR(45) NOT NULL,
+  `login` VARCHAR(100) NOT NULL,
+  `time` INT(11) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `table_login_attempts` */
 
@@ -563,21 +563,21 @@ CREATE TABLE `table_login_attempts` (
 DROP TABLE IF EXISTS `table_menus`;
 
 CREATE TABLE `table_menus` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `menu_id` int(10) unsigned NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `link` varchar(50) NOT NULL,
-  `list_id` varchar(200) NOT NULL,
-  `icon` varchar(50) NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  `position` tinyint(4) NOT NULL,
-  `description` text NOT NULL,
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `menu_id` INT(10) UNSIGNED NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `link` VARCHAR(50) NOT NULL,
+  `list_id` VARCHAR(200) NOT NULL,
+  `icon` VARCHAR(50) NOT NULL,
+  `status` TINYINT(1) NOT NULL,
+  `position` TINYINT(4) NOT NULL,
+  `description` TEXT NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `table_menus` */
 
-insert  into `table_menus`(`id`,`menu_id`,`name`,`link`,`list_id`,`icon`,`status`,`position`,`description`) values 
+INSERT  INTO `table_menus`(`id`,`menu_id`,`name`,`link`,`list_id`,`icon`,`status`,`position`,`description`) VALUES 
 (21,1,'Beranda','admin/','home_index','home',1,1,'-'),
 (23,1,'Group','admin/group','group_index','people',1,1,'-'),
 (24,1,'Setting','admin/setting','admin_setting','settings',1,1,'-'),
@@ -607,18 +607,18 @@ insert  into `table_menus`(`id`,`menu_id`,`name`,`link`,`list_id`,`icon`,`status
 DROP TABLE IF EXISTS `table_profile`;
 
 CREATE TABLE `table_profile` (
-  `profile_id` int(11) NOT NULL AUTO_INCREMENT,
-  `profile_title` varchar(200) NOT NULL,
-  `profile_content` text NOT NULL,
-  `profile_postdate` date NOT NULL,
-  `profile_postime` datetime NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `profile_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `profile_title` VARCHAR(200) NOT NULL,
+  `profile_content` TEXT NOT NULL,
+  `profile_postdate` DATE NOT NULL,
+  `profile_postime` DATETIME NOT NULL,
+  `user_id` INT(11) NOT NULL,
   PRIMARY KEY (`profile_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `table_profile` */
 
-insert  into `table_profile`(`profile_id`,`profile_title`,`profile_content`,`profile_postdate`,`profile_postime`,`user_id`) values 
+INSERT  INTO `table_profile`(`profile_id`,`profile_title`,`profile_content`,`profile_postdate`,`profile_postime`,`user_id`) VALUES 
 (5,'Visi & Misi','Konten Visi dan Misi','2018-07-16','0000-00-00 00:00:00',1),
 (6,'Dasar Hukum','Isi Dasar Hukum 1','2018-07-17','0000-00-00 00:00:00',1),
 (7,'Struktur Organisasi','Daftar Struktur Organisasi','2018-07-17','0000-00-00 00:00:00',1),
@@ -629,18 +629,18 @@ insert  into `table_profile`(`profile_id`,`profile_title`,`profile_content`,`pro
 DROP TABLE IF EXISTS `table_userprofiles`;
 
 CREATE TABLE `table_userprofiles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `surename` varchar(200) NOT NULL,
-  `birthplace` varchar(200) NOT NULL,
-  `sex` enum('Pria','Wanita','','') NOT NULL,
-  `phone` varchar(20) NOT NULL,
-  `address` text NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `surename` VARCHAR(200) NOT NULL,
+  `birthplace` VARCHAR(200) NOT NULL,
+  `sex` ENUM('Pria','Wanita','','') NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `address` TEXT NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=INNODB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 /*Data for the table `table_userprofiles` */
 
-insert  into `table_userprofiles`(`id`,`surename`,`birthplace`,`sex`,`phone`,`address`) values 
+INSERT  INTO `table_userprofiles`(`id`,`surename`,`birthplace`,`sex`,`phone`,`address`) VALUES 
 (3,'M. TAHIR R,SH','','Pria','082293270367','Desa Tojabi, Kec. Lasusua'),
 (16,'Admin','','Pria','-','-'),
 (20,'Raviq Lahadi','','Pria','08128891210012','Jln Mangga no 37'),
@@ -651,26 +651,26 @@ insert  into `table_userprofiles`(`id`,`surename`,`birthplace`,`sex`,`phone`,`ad
 DROP TABLE IF EXISTS `table_users`;
 
 CREATE TABLE `table_users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `group_id` mediumint(8) unsigned NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `username` varchar(100) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(254) NOT NULL,
-  `activation_selector` varchar(255) DEFAULT NULL,
-  `activation_code` varchar(255) DEFAULT NULL,
-  `forgotten_password_selector` varchar(255) DEFAULT NULL,
-  `forgotten_password_code` varchar(255) DEFAULT NULL,
-  `forgotten_password_time` int(11) unsigned DEFAULT NULL,
-  `remember_selector` varchar(255) DEFAULT NULL,
-  `remember_code` varchar(255) DEFAULT NULL,
-  `created_on` int(11) unsigned NOT NULL,
-  `last_login` int(11) unsigned DEFAULT NULL,
-  `active` tinyint(1) unsigned DEFAULT NULL,
-  `first_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `image` text NOT NULL,
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `group_id` MEDIUMINT(8) UNSIGNED NOT NULL,
+  `ip_address` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(100) DEFAULT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(254) NOT NULL,
+  `activation_selector` VARCHAR(255) DEFAULT NULL,
+  `activation_code` VARCHAR(255) DEFAULT NULL,
+  `forgotten_password_selector` VARCHAR(255) DEFAULT NULL,
+  `forgotten_password_code` VARCHAR(255) DEFAULT NULL,
+  `forgotten_password_time` INT(11) UNSIGNED DEFAULT NULL,
+  `remember_selector` VARCHAR(255) DEFAULT NULL,
+  `remember_code` VARCHAR(255) DEFAULT NULL,
+  `created_on` INT(11) UNSIGNED NOT NULL,
+  `last_login` INT(11) UNSIGNED DEFAULT NULL,
+  `active` TINYINT(1) UNSIGNED DEFAULT NULL,
+  `first_name` VARCHAR(50) DEFAULT NULL,
+  `last_name` VARCHAR(50) DEFAULT NULL,
+  `phone` VARCHAR(20) DEFAULT NULL,
+  `image` TEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uc_email` (`email`),
   UNIQUE KEY `uc_activation_selector` (`activation_selector`),
@@ -678,11 +678,11 @@ CREATE TABLE `table_users` (
   UNIQUE KEY `uc_remember_selector` (`remember_selector`),
   KEY `group_id` (`group_id`),
   CONSTRAINT `table_users_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `table_groups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=INNODB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `table_users` */
 
-insert  into `table_users`(`id`,`group_id`,`ip_address`,`username`,`password`,`email`,`activation_selector`,`activation_code`,`forgotten_password_selector`,`forgotten_password_code`,`forgotten_password_time`,`remember_selector`,`remember_code`,`created_on`,`last_login`,`active`,`first_name`,`last_name`,`phone`,`image`) values 
+INSERT  INTO `table_users`(`id`,`group_id`,`ip_address`,`username`,`password`,`email`,`activation_selector`,`activation_code`,`forgotten_password_selector`,`forgotten_password_code`,`forgotten_password_time`,`remember_selector`,`remember_code`,`created_on`,`last_login`,`active`,`first_name`,`last_name`,`phone`,`image`) VALUES 
 (1,1,'127.0.0.1','admin@admin.com','$2y$10$CquJ/t1YiAugcfD3gHyGDOIp/gJUOcqjXTXedjSJash9TYG.EQCmG','admin@admin.com',NULL,'',NULL,NULL,NULL,NULL,NULL,1268889823,1568889846,1,'Admin','istrator','081342989185','USER_1_1568688392.jpg'),
 (2,2,'::1','admin@gmail.com','$2y$10$MIefZA8pYS74hnO7LlBU8u.D/qexKH39s.TYvcdzb8tIa9Up2E1Z2','admin@gmail.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,1563601662,1568889919,1,'admin','admin','081342989185','USER_2_1568439487.png'),
 (3,3,'::1','manager@gmail.com','$2y$10$tdrKZ3Dwa7qf2Gszwz47/eK7Q7xMpDiO/CbKzoDnAu9K7WwemgbFK','manager@gmail.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,1568441196,1570935942,1,'manager','manager','123443211234','USER_3_1568441323.png');
