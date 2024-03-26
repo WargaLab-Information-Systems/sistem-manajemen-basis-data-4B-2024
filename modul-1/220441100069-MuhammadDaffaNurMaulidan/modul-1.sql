@@ -42,7 +42,13 @@ CREATE TABLE Pembelian (
     total FLOAT(10),
     FOREIGN KEY (id_supplier) REFERENCES Supplier(id_supplier)
 );
-
+CREATE TABLE Keuangan (
+    id_keuangan INT PRIMARY KEY,
+    jenis_transaksi VARCHAR(50), -- Penjualan, Pembelian
+    id_transaksi INT, -- Foreign Key ke Transaksi / Pembelian
+    waktu_transaksi TIMESTAMP,
+    total FLOAT(10)
+);
 CREATE TABLE Koreksi_Stok (
     id_koreksi INT PRIMARY KEY,
     id_barang INT, -- Foreign Key ke Barang
