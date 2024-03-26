@@ -152,6 +152,15 @@ VALUES
 (4, 4, '2024-03-24 23:10:00', 120, 115, 'Penggantian barang rusak'),
 (5, 5, '2024-03-25 00:45:00', 200, 205, 'Pembelian tambahan stok');
 
+INSERT INTO stok (id_koreksi, id_barang, waktu_koreksi, stok_awal, stok_akhir, keterangan)
+VALUES 
+(6, 6, '2024-03-24 18:40:00', 50, 45, 'Kesalahan input stok'),
+(7, 7, '2024-03-24 19:55:00', 80, 75, 'Perhitungan ulang stok'),
+(8, 8, '2024-03-24 21:30:00', 100, 95, 'Retur dari pelanggan'),
+(9, 9, '2024-03-24 23:10:00', 120, 115, 'Penggantian barang rusak'),
+(10, 10, '2024-03-25 00:45:00', 200, 205, 'Pembelian tambahan stok');
+
+
 SELECT * FROM barang;
 SELECT * FROM detail_pembelian;
 SELECT * FROM detail_transaksi;
