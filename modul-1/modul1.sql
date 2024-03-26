@@ -219,7 +219,7 @@ SELECT * FROM tb_hutang
 
 
 
-ALTER TABLE tb_laporan_penjualan RENAME TO tb_laporan_penjualan
+ALTER TABLE laporan_penjualan RENAME TO tb_laporan_penjualan
 
 
 
