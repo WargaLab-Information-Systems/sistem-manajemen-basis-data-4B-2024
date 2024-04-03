@@ -1,0 +1,108 @@
+CREATE DATABASE perpustakaan;
+
+USE perpustakaan;
+
+CREATE TABLE petugas(
+id_petugas VARCHAR(10),
+username VARCHAR(15),
+pasword VARCHAR(15),
+nama VARCHAR(25),
+PRIMARY KEY (id_petugas)
+);
+
+CREATE TABLE anggota(
+id_anggota VARCHAR(10),
+nama_anggota VARCHAR(20),
+angkatan_anggota VARCHAR(6),
+tempat_lahir_anggota VARCHAR(20),
+tanggal_lahir_anggota DATE,
+nomor_telpon INT(12),
+jenis_kelamin VARCHAR(15),
+status_pinjam VARCHAR(15),
+PRIMARY KEY (id_anggota)
+);
+
+CREATE TABLE buku(
+kode_buku VARCHAR(10),
+judul_buku VARCHAR(25),
+pengarang_buku VARCHAR(30),
+penerbit_buku VARCHAR(30),
+tahun_buku VARCHAR(10),
+jumlah_buku VARCHAR(5),
+status_buku VARCHAR(10),
+klasifikasi_buku VARCHAR(20),
+PRIMARY KEY (kode_buku)
+);
+
+CREATE TABLE peminjaman(
+kode_peminjaman VARCHAR(10),
+id_anggota VARCHAR(10),
+id_petugas VARCHAR(10),
+tanggal_pinjam DATE,
+tanggal_kembali DATE,
+kode_buku VARCHAR(10),
+PRIMARY KEY (kode_peminjaman),
+FOREIGN KEY (id_anggota) REFERENCES anggota(id_anggota),
+FOREIGN KEY (id_petugas) REFERENCES petugas(id_petugas),
+FOREIGN KEY (kode_buku) REFERENCES buku(kode_buku)
+)
+
+CREATE TABLE pengembalian(
+kode_kembali VARCHAR(10),
+id_anggota VARCHAR(10),
+id_petugas VARCHAR(10),
+tanggal_pinjam DATE,
+tanggal_kembali DATE,
+kode_buku VARCHAR(10),
+denda VARCHAR(15),
+PRIMARY KEY (kode_kembali),
+FOREIGN KEY (id_anggota) REFERENCES anggota(id_anggota),
+FOREIGN KEY (id_petugas) REFERENCES petugas(id_petugas),
+FOREIGN KEY (kode_buku) REFERENCES buku(kode_buku)
+)
+
+INSERT INTO petugas VALUES 
+('PTG001', 'putra12', 'rahasia123', 'Putra'), 
+('PTG002', 'dewi88', 'salam10', 'Dewi'), 
+('PTG003', 'budi123', 'rahasia456', 'Budi'), -- Lengkapkan nilai untuk baris terakhir
+('PTG004', 'rini123', 'salam123', 'Rini'); -- Tambahkan baris baru jika diperlukan
+
+-- Insert data ke tabel anggota
+INSERT INTO anggota (id_anggota, nama_anggota, angkatan_anggota, tempat_lahir_anggota, tanggal_lahir_anggota, nomor_telpon, jenis_kelamin, status_pinjam)
+VALUES 
+('A001', 'Adi Pratama', '2020', 'Jakarta', '1998-05-15', 123456789, 'Laki-laki', 'Tidak Meminjam'),
+('A002', 'Bunga Citra', '2019', 'Surabaya', '1999-08-20', 987654321, 'Perempuan', 'Sedang Meminjam'),
+('A003', 'Cindy Lestari', '2021', 'Bandung', '2001-03-10', 111222333, 'Perempuan', 'Tidak Meminjam');
+
+-- Insert data ke tabel buku
+INSERT INTO buku (kode_buku, judul_buku, pengarang_buku, penerbit_buku, tahun_buku, jumlah_buku, status_buku, klasifikasi_buku)
+VALUES 
+('BK001', 'Percikan Revolusi', 'Damar Shashangka', 'Penerbit A', '2020', '100', 'Tersedia', 'Sejarah'),
+('BK002', 'Seni Menggambar', 'Sandra Wijaya', 'Penerbit B', '2018', '50', 'Tersedia', 'Seni'),
+('BK003', 'Dasar-Dasar Pemrograman', 'Andi Susanto', 'Penerbit C', '2021', '80', 'Tersedia', 'Teknologi');
+
+-- Insert data ke tabel peminjaman
+INSERT INTO peminjaman (kode_peminjaman, id_anggota, id_petugas, tanggal_pinjam, tanggal_kembali, kode_buku)
+VALUES 
+('PIN001', 'A002', 'PTG001', '2023-01-10', '2023-01-20', 'BK001'),
+('PIN002', 'A003', 'PTG002', '2023-02-05', '2023-02-15', 'BK002'),
+('PIN003', 'A001', 'PTG003', '2023-03-20', '2023-03-30', 'BK003');
+
+-- Insert data ke tabel pengembalian
+INSERT INTO pengembalian (kode_kembali, id_anggota, id_petugas, tanggal_pinjam, tanggal_kembali, kode_buku, denda)
+VALUES 
+('KEM001', 'A002', 'PTG001', '2023-01-10', '2023-01-25', 'BK001', '5000'),
+('KEM002', 'A003', 'PTG002', '2023-02-05', '2023-02-18', 'BK002', '7500'),
+('KEM003', 'A001', 'PTG003', '2023-03-20', '2023-04-02', 'BK003', '10000');
+
+SELECT * FROM petugas;
+
+SELECT * FROM anggota_meminjam_1_buku;
+
+CREATE VIEW anggota_meminjam_1_buku AS
+SELECT a.id_anggota, a.nama_anggota, COUNT(p.kode_buku) AS jumlah_buku_pinjam
+FROM anggota a
+INNER JOIN peminjaman p ON a.id_anggota = p.id_anggota
+GROUP BY a.id_anggota, a.nama_anggota
+HAVING jumlah_buku_pinjam = 1;
+
