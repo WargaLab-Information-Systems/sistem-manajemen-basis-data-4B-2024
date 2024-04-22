@@ -1,0 +1,144 @@
+USE perpustakaan;
+
+SELECT * FROM petugas;
+
+
+DELIMITER//
+CREATE PROCEDURE getNama (IN username VARCHAR(15))
+	BEGIN 
+	SELECT * FROM petugas
+	WHERE nama = username ;
+	END//
+DELIMITER ;
+
+DROP PROCEDURE getNama
+
+CALL getNama('putra');
+
+SELECT * FROM anggota;
+
+DELIMITER//
+CREATE PROCEDURE getNamaAnggota (IN namaanggota VARCHAR(15))
+	BEGIN 
+	SELECT * FROM anggota
+	WHERE nama_anggota = namaanggota ;
+	END//
+DELIMITER ;
+
+DROP PROCEDURE getNamaAnggota
+
+CALL getNamaAnggota('Adi Pratama');
+
+SELECT * FROM buku
+
+DELIMITER//
+CREATE PROCEDURE getBuku (IN jdl_buku VARCHAR(25), prg_buku VARCHAR(15))
+	BEGIN 
+	SELECT * FROM buku
+	WHERE judul_buku = jdl_buku AND pengarang_buku = prg_buku ;
+	END//
+DELIMITER ;
+
+CALL getBuku ('Seni Menggambar', 'Sandra Wijaya')
+
+-- nomer 4
+
+SELECT * FROM peminjaman
+
+DELIMITER//
+CREATE PROCEDURE getPeminjaman (IN kd_peminjam VARCHAR(25), tgl_pinjam VARCHAR(15), tgl_kembali VARCHAR(30))
+	BEGIN 
+	SELECT * FROM peminjaman
+	WHERE kode_peminjaman = kd_peminjam AND tanggal_pinjam = tgl_pinjam AND tanggal_kembali = tgl_kembali;
+	END//
+DELIMITER ;
+
+DROP PROCEDURE getPeminjaman
+
+CALL getPeminjaman ('PIN003', '2023-03-20', '2023-03-30')
+
+-- no 5
+
+SELECT * FROM petugas
+
+DELIMITER//
+CREATE PROCEDURE InsertPetugas (IN ip VARCHAR(10), IN usnm VARCHAR(15), IN pw VARCHAR(15), IN nm VARCHAR(25))
+	BEGIN
+	INSERT INTO petugas (id_petugas, username, pasword, nama)
+	VALUES (ip, usnm, pw, nm);
+	END//
+DELIMITER ;
+
+SELECT * FROM petugas
+CALL InsertPetugas ('PTG006', 'pirang77', 'pass2012', 'Syafi');
+
+-- nomor 6
+DELIMITER //
+CREATE PROCEDURE GetJumlahBuku(OUT jumlah_buku INT)
+BEGIN
+    SELECT COUNT(*) INTO jumlah_buku
+    FROM buku;
+END//
+DELIMITER ;
+
+SET @jumlah = 0;
+CALL GetJumlahBuku(@jumlah);
+SELECT @jumlah;
+
+-- nomor 7
+
+SELECT * FROM buku
+
+DELIMITER//
+CREATE PROCEDURE CountPenerbitBuku(IN PenerbitBuku VARCHAR (15),OUT jumlah_buku INT (5))
+BEGIN 
+	SELECT COUNT(kode_buku) INTO jumlah_buku FROM buku
+	WHERE PenerbitBuku = penerbit_buku;
+END//
+DELIMITER;
+
+DROP PROCEDURE CountByBuku
+
+CALL CountPenerbitBuku('Penerbit A',@jumlah_buku);
+SELECT @jumlah_buku
+
+
+
+DELIMITER//
+CREATE PROCEDURE InsertBuku (IN kp VARCHAR(10), IN jdlbk VARCHAR(25), IN pgbk VARCHAR(30), IN ptbk VARCHAR(30), IN tb VARCHAR(10), IN jb VARCHAR(5), IN ssbk VARCHAR(10), IN klasbk VARCHAR(20))
+	BEGIN
+	INSERT INTO buku (kode_buku, judul_buku, pengarang_buku, penerbit_buku, tahun_buku, jumlah_buku, status_buku, klasifikasi_buku)
+	VALUES (kp, jdlbk, pgbk, ptbk, tb, jb, ssbk, klasbk);
+	END//
+DELIMITER ;
+
+DROP PROCEDURE InsertBuku
+
+CALL InsertBuku ('BK004', 'Melukis', 'Zubaid Maulana', 'Penerbit D', '2024', '22', 'Tersedia', 'Seni');
+
+SELECT * FROM buku
+
+DELIMITER//
+CREATE PROCEDURE InsertBuku (IN kp VARCHAR(10), IN jdlbk VARCHAR(25), IN pgbk VARCHAR(30), IN ptbk VARCHAR(30), IN tb VARCHAR(10), IN jb VARCHAR(5), IN ssbk VARCHAR(10), IN klasbk VARCHAR(20))
+	BEGIN
+	INSERT INTO buku (kode_buku, judul_buku, pengarang_buku, penerbit_buku, tahun_buku, jumlah_buku, status_buku, klasifikasi_buku)
+	VALUES (kp, jdlbk, pgbk, ptbk, tb, jb, ssbk, klasbk);
+	END//
+DELIMITER ;
+
+CALL InsertBuku ('BK005', 'Seni Kehidupan', 'Zubaid Maulana', 'Penerbit E', '2019', '12', 'Tersedia', 'Seni');
+
+-- -- -- -- -- -- -- 
+
+DROP PROCEDURE CountStBuku
+
+DELIMITER//
+CREATE PROCEDURE CountStBuku(IN stbuku VARCHAR (10), OUT jumlah_buku INT (5))
+BEGIN 
+	SELECT COUNT(kode_buku) INTO jumlah_buku FROM buku
+	WHERE stbuku = status_buku;
+END//
+DELIMITER;
+
+CALL CountStBuku('Tersedia',@stbuku);
+SELECT @stbuku
