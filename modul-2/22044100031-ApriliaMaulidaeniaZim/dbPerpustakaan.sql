@@ -17,7 +17,7 @@ PRIMARY KEY (id_buku)
 INSERT INTO buku (id_buku, judul_buku, pengarang_buku, penerbit_buku, tahun_buku, 
 jumlah_buku, status_buku, klasifikasi_buku) 
 VALUES
-(1110, 'Laskar Pelangi', 'Andrea Hiratkja', 'Bentang Pustaka', 2005, 20, 'Tersedia', 'Fiksi'),
+(1110, 'Laskar Pelangi', 'Andrea Hiraja', 'Bentang Pustaka', 2005, 20, 'Tersedia', 'Fiksi'),
 (1111, 'Ayat-Ayat Cinta', 'Habbiburahman', 'Republika', 2004, 30, 'Tersedia', 'Fiksi Romantis'),
 (1112, 'Bumi Manusia', 'Pramoedya Ananta', 'Hasta Mitra', 1980, 10, 'Tidak Tersedia', 'Fiksi Sejarah' ),
 (1113, 'Cinta di Dalam Gelas', 'Andrea Hirata', 'Bentang Pustaka', 2006, 50, 'Tersedia', 'Fiksi'),
