@@ -1,0 +1,52 @@
+CREATE DATABASE coba;
+
+USE coba;
+
+-- soal 1
+CREATE TABLE mahasiswa (
+    nama VARCHAR(20),
+    alamat VARCHAR(20)
+);
+SELECT * FROM mahasiswa;
+DESC mahasiswa;
+
+-- soal 2
+ALTER TABLE mahasiswa 
+ADD keterangan VARCHAR(15);
+SELECT * FROM mahasiswa;
+
+-- soal 3
+ALTER TABLE mahasiswa 
+ADD nim INT(11) FIRST;
+SELECT * FROM mahasiswa;
+
+-- soal 4
+ALTER TABLE mahasiswa 
+ADD phone VARCHAR(15);
+SELECT * FROM mahasiswa; 
+
+-- soal 5
+ALTER TABLE mahasiswa 
+MODIFY COLUMN nim CHAR(11);
+SELECT * FROM mahasiswa;
+DESC mahasiswa;
+
+-- soal 6
+ALTER TABLE mahasiswa 
+CHANGE COLUMN phone telepon CHAR(11);
+SELECT * FROM mahasiswa;
+
+-- soal 7
+ALTER TABLE mahasiswa
+DROP COLUMN keterangan;
+SELECT * FROM mahasiswa;
+
+-- soal 8
+RENAME TABLE mahasiswa TO student;
+SELECT * FROM student;
+
+-- soal 9
+ALTER TABLE student ADD CONSTRAINT PRIMARY KEY (nim);
+SELECT * FROM student;
+DESC student;
+
