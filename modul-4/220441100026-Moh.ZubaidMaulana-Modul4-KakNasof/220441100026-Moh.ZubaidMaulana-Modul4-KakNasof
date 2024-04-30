@@ -1,0 +1,49 @@
+CREATE DATABASE coba;
+
+USE coba;
+
+#nomorsatu 
+CREATE TABLE mahasiswa(
+nama VARCHAR(20),
+alamat VARCHAR(20));
+SELECT*FROM mahasiswa;
+ 
+#nomordua 
+ALTER TABLE mahasiswa ADD keterangan VARCHAR(15);
+SELECT*FROM mahasiswa;
+
+#nomortiga
+ALTER TABLE mahasiswa ADD nim INT(11) FIRST;
+SELECT*FROM mahasiswa;
+-- Menambahkan kolom "nim" dengan tipe data INT(11) di posisi pertama (sebagai kolom pertama) ke tabel "mahasiswa"
+
+#nomorempat
+ALTER TABLE mahasiswa ADD COLUMN phone VARCHAR(15) AFTER alamat;
+SELECT*FROM mahasiswa;
+-- menambahkan kolom phone setelah kolom alamat ke tabel mahasiswa
+
+#nomorlima
+ALTER TABLE mahasiswa MODIFY COLUMN nim CHAR(11);
+DESC mahasiswa;
+-- Mengubah tipe data kolom "nim" dari INT menjadi CHAR dengan panjang 11 karakter.
+
+#nomorenam
+ALTER TABLE mahasiswa CHANGE COLUMN phone telepon VARCHAR(20);
+DESC mahasiswa;
+-- Mengubah nama kolom "phone" menjadi "telepon" dan merubah tipe datanya menjadi VARCHAR(20)
+
+#momortujuh
+ALTER TABLE mahasiswa DROP keterangan;
+SELECT*FROM mahasiswa;
+
+#nomordelapan
+ALTER TABLE mahasiswa RENAME student;
+SELECT*FROM student;
+-- Mengganti nama tabel "mahasiswa" menjadi "student".
+
+#nomorsembilan
+ALTER TABLE student ADD CONSTRAINT PRIMARY KEY (nim);
+DESC student;
+-- Menambahkan konstrain PRIMARY KEY pada kolom "nim" di tabel "student".
+
+DROP DATABASE 
