@@ -218,9 +218,12 @@ SELECT * FROM tb_laporan_penjualan
 SELECT * FROM tb_hutang
 
 
-
-ALTER TABLE laporan_penjualan RENAME TO tb_laporan_penjualan
+ALTER TABLE tb_laporan_penjualan RENAME TO tb_laporan_penjualan
 
 
 
 DROP DATABASE db_swalayan
+
+
+SELECT * FROM tb_pelanggan
+UPDATE tb_pelanggan SET nama = 'Putra', alamat = 'Jalan Baru' WHERE id_pel=1
