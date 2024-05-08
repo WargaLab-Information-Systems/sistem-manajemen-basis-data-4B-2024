@@ -1,0 +1,38 @@
+CREATE DATABASE coba;
+
+SHOW DATABASES;
+
+USE coba;
+
+CREATE TABLE mahasiswa (
+  nama VARCHAR(50),
+  prodi VARCHAR(50),
+  alamat VARCHAR(15)
+);
+
+SHOW TABLES;
+
+ALTER TABLE mahasiswa ADD keterangan VARCHAR(15);
+
+ALTER TABLE mahasiswa ADD COLUMN nim INT(11) FIRST;
+
+ALTER TABLE mahasiswa ADD COLUMN phone VARCHAR(15) AFTER alamat;
+SELECT * FROM mahasiswa
+
+ALTER TABLE mahasiswa MODIFY COLUMN nim CHAR(11);
+
+ALTER TABLE mahasiswa CHANGE COLUMN phone telepon VARCHAR(20);
+
+ALTER TABLE mahasiswa DROP COLUMN keterangan;
+
+DESC mahasiswa;
+
+ALTER TABLE mahasiswa RENAME TO student;
+
+SELECT*FROM student
+
+ALTER TABLE student ADD PRIMARY KEY (nim);
+
+DESC student;
+
+DROP DATABASE coba;
