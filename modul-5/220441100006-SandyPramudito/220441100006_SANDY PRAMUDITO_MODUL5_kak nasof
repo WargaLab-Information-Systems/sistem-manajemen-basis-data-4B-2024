@@ -1,0 +1,52 @@
+-- 1.	Buatkanlah procedure dan lihatkan hasilnya untuk mengetahui umur buku kalau dilihat dari tahun penerbitan buku.
+DELIMITER //
+CREATE PROCEDURE HitungUmurBuku(IN kode_buku_param VARCHAR(10))
+BEGIN
+    SELECT CONCAT('Umur buku ', kode_buku_param, ' adalah ', (YEAR(CURDATE()) - tahun_buku), ' tahun.') AS 'Hasil'
+    FROM buku
+    WHERE kode_buku = kode_buku_param;
+END//
+DELIMITER ;
+CALL HitungUmurBuku('BK013'); 
+
+
+-- 2.	Buatkan procedure untuk mendelete daftar buku yang tahun pembuatannya di bawah tahun 2000, tetapi jika penerbitnya dari AndhiPublisher maka tidak dapat di delete.
+DELIMITER //
+CREATE PROCEDURE hapus_data_buku()
+BEGIN
+    DELETE FROM buku
+    WHERE tahun_buku < 2000 
+    AND penerbit_buku != 'AndhiPublisher';
+END//
+DELIMITER ;
+CALL hapus_data_buku();
+SELECT * FROM buku
+
+
+-- 3.	Buatkanlah procedure untuk membuat perubahan data pada tabel buku, jika ada pengembalian buku pada tabel pengembalian buku dengan kode buku tertentu maka jumlah buku pada tabel buku akan bertambah.
+DELIMITER //
+CREATE PROCEDURE kembalian_buku(IN kodebuku_pinjam VARCHAR (10), IN jumlah VARCHAR (5))
+BEGIN
+    UPDATE buku SET jumlah_buku = jumlah_buku + jumlah 
+    WHERE kode_buku = kodebuku_pinjam;
+END //
+DELIMITER //
+CALL kembalian_buku('BK012','5');
+SELECT * FROM buku
+
+
+-- 4.	Meneruskan pada point ke 3, buatkanlah procedure untuk mengetahui berapa jumlah buku yang dipinjam anggota tertentu.
+DELIMITER//
+CREATE PROCEDURE jumlah_pinjaman(IN id_anggota VARCHAR (10))
+BEGIN
+    SELECT p.id_anggota, a.nama_anggota, COUNT(p.id_anggota)
+    AS jumlahbuka_dipinjam
+    FROM peminjam p, anggota a
+    WHERE a.id_anggota = p.id_anggota AND p.id_anggota = id_anggota;
+END//
+DELIMITER//
+CALL jumlah_pinjaman('3');
+
+
+-- 5.	Buatkanlah procedure untuk menghapus procedure yang sudah dibuat.
+DROP PROCEDURE jumlah_pinjaman
