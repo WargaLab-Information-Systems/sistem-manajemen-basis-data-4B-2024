@@ -1,0 +1,137 @@
+USE tokobuku;
+
+
+NO 1 : Buatlah STORED PROCEDURE Variabel untuk menampilkan Biodata masing-masing dengan isi : 
+Nim, Nama mahasiswa, Alamat, NO Telpon, jenis Kelamin dan Hobi serta tambahkan umur sekarang. 
+Kemudian tampilkan hasilnya.
+DELIMITER //
+CREATE PROCEDURE biodata(
+	IN varnama VARCHAR(50), 
+	IN varnim VARCHAR(20),
+	IN varalamat VARCHAR(50), 
+	IN vartgl_lahir DATE,
+	IN varjenis_kelamin VARCHAR(10), 
+	IN varumur INT,
+	IN varhobi VARCHAR(50), 
+	IN varno_telp VARCHAR(15)
+)
+BEGIN
+	DECLARE nama VARCHAR(50);
+	DECLARE nim VARCHAR(20);
+	DECLARE alamat VARCHAR(50);
+	DECLARE tgl_lahir DATE;
+	DECLARE jenis_kelamin VARCHAR(10);
+	DECLARE umur INT;
+	DECLARE hobi VARCHAR(50);
+	DECLARE no_telp VARCHAR(15);
+	
+	SET nama = varnama;
+	SET nim = varnim;
+	SET alamat = varalamat;
+	SET tgl_lahir = vartgl_lahir;
+	SET jenis_kelamin = varjenis_kelamin;
+	SET umur = TIMESTAMPDIFF(YEAR, vartgl_lahir, CURDATE());
+	SET hobi = varhobi;
+	SET no_telp = varno_telp;
+	
+	SELECT 
+		nama AS Nama_Mahasiswa, 
+		nim AS Nim, 
+		alamat AS Alamat, 
+		tgl_lahir AS Tgl_lahir,
+		jenis_kelamin AS Gender, 
+		umur AS Usia, 
+		hobi AS Hobi, 
+		no_telp AS No_Telp;
+END //
+DELIMITER ;
+CALL biodata ("Sandy Pramudito","220441100006","Gresik","2004-12-11","Laki-laki","","Menyanyi","0881027504986");
+
+NO 2 : Buatlah STORED PROCEDURE untuk menentukan keterangan pengingat pengembalian buku, 
+dengan ketentuan jika tanggal pinjam <= 2 hari “Silahkan Pergunakan Buku dengan baik”’ 
+Jika tanggal pinjam antara 3 – 5 hari “Ingat!, Waktu Pinjam Segera habis”, 
+dan jika tanggal pinjam >= 6 hari “Warning!!!, Denda Menanti Anda”.
+DELIMITER //
+CREATE PROCEDURE reminder_pinjam()
+BEGIN
+    SELECT 
+        kode_kembali,
+        id_anggota,
+        tanggal_pinjam,
+        DATEDIFF(tanggal_kembali, tanggal_pinjam) AS lama_pinjam,
+        CASE
+            WHEN DATEDIFF(tanggal_kembali, tanggal_pinjam) <= 2 THEN 'Silahkan Pergunakan Buku dengan baik'
+            WHEN DATEDIFF(tanggal_kembali, tanggal_pinjam) BETWEEN 3 AND 5 THEN 'Ingat!, Waktu pinjam segera habis'
+            WHEN DATEDIFF(tanggal_kembali, tanggal_pinjam) >= 6 THEN 'Warning!!!, Denda Menanti Anda'
+        END AS statusnya
+    FROM 
+        pengembalian 
+    ORDER BY 
+        lama_pinjam ASC;
+END //
+DELIMITER ;
+CALL reminder_pinjam;
+
+SELECT * FROM buku
+UPDATE
+
+NO 3 : Buatlah STORED PROCEDURE untuk memeriksa jumlah denda yang dimiliki mahasiswa! 
+Jika mahasiswa mendapat denda maka akan menampilkan DATA denda yang belum dibayarkan, 
+jika mahasiswa sudah membayar atau tidak memiliki tanggungan denda maka akan 
+menampilkan pesan bahwa mahasiswa tersebut tidak memiliki tanggungan atau denda.
+DROP PROCEDURE denda
+DELIMITER //
+CREATE PROCEDURE denda (
+    IN idanggota VARCHAR(10)
+)
+BEGIN
+    DECLARE jumlah_denda VARCHAR(50);
+    DECLARE total_denda INT(120);
+    
+    SELECT SUM(denda) INTO total_denda
+    FROM pengembalian
+    WHERE id_anggota = idanggota;
+
+    IF total_denda IS NOT NULL AND total_denda != 0 THEN
+        SET jumlah_denda = total_denda;
+    ELSE
+        SET jumlah_denda = 'Anda tidak memiliki tanggungan/denda';
+    END IF;
+
+    SELECT jumlah_denda;
+END //
+DELIMITER ;
+CALL denda('6');
+SELECT * FROM pengembalian;
+
+
+NO 4 : Buatlah STORED PROCEDURE Looping untuk mencetak DATA peminjaman 1 sampai dengan 10. 
+DELIMITER //
+CREATE PROCEDURE mencetakpeminjaman(IN cetak INT)
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    WHILE i <= cetak DO
+        SELECT * FROM peminjam LIMIT cetak;
+        SET i = i + 1;
+    END WHILE;
+END //
+DELIMITER ;
+
+CALL mencetakpeminjaman(10);
+DROP PROCEDURE cetakpeminjaman
+SELECT * FROM peminjam
+
+
+NO 5 : Hapuslah anggota dengan jenis kelamin Laki-laki dari basisdata PERPUSTAKAAN. Akan tetapi 
+jika Anggota tersebut mempunyai STATUS pinjam tidak nol,maka pemain tidak boleh dihapus dari basisdata!
+DELIMITER //
+CREATE PROCEDURE hapus(IN jeniskelamin VARCHAR(20))
+BEGIN
+    IF jeniskelamin = 'Laki-laki' THEN
+        DELETE FROM anggota WHERE jenis_kelamin = 'laki-laki' AND status_pinjam != 'Aktif';
+    END IF;
+END //
+DELIMITER ;
+CALL hapus ('Laki-laki')
+SELECT * FROM anggota;
+DROP PROCEDURE hapus
