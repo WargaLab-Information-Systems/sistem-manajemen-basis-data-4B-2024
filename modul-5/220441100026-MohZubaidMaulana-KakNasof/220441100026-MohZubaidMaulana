@@ -1,0 +1,104 @@
+USE perpustakaan ;
+
+SELECT * FROM anggota;
+SELECT * FROM buku;
+SELECT * FROM peminjaman;
+SELECT * FROM pengembalian;
+SELECT * FROM petugas;
+
+-- NO 1. Buatkanlah procedure dan lihatkan hasilnya untuk mengetahui umur buku kalau di lihat dari tahun penerbitan buku
+
+DELIMITER //
+CREATE PROCEDURE HitungUmurBuku(
+    IN KodeBukuInput VARCHAR(10),
+    OUT UmurBuku INT
+)
+BEGIN
+    DECLARE TahunPenerbit INT;
+    
+    -- Mengambil tahun penerbitan buku
+    SELECT tahun_buku INTO TahunPenerbit
+    FROM buku
+    WHERE kode_buku = KodeBukuInput;
+    
+    -- Menghitung umur buku
+    SET UmurBuku = YEAR(CURRENT_DATE()) - TahunPenerbit;
+    
+END // 
+DELIMITER ;
+
+CALL HitungUmurBuku('BK002', @UmurBuku);
+SELECT @UmurBuku AS 'Umur_Buku_dalam_Tahun';
+
+SELECT * FROM buku
+
+-- No 2 Buatkan procedure untuk mendelete daftar buku yang tahun pembuatannya di bawah tahun 2000, 
+-- tetapi jika penerbitnya dari AndhiPublisher maka tidak dapat di delete. 
+
+DELIMITER//
+CREATE PROCEDURE Delete_buku ()
+BEGIN
+    DELETE FROM buku
+    WHERE Tahun_Buku < 2000 AND Penerbit_Buku != 'Andi Publisher';
+END//
+DELIMITER;
+
+CALL Delete_buku();
+DROP PROCEDURE Delete_buku
+
+SELECT * FROM buku;
+
+DROP PROCEDURE Delete_buku
+
+INSERT INTO buku (kode_buku, judul_buku, pengarang_buku, penerbit_buku, tahun_buku, jumlah_buku, status_buku, klasifikasi_buku)
+VALUES 
+('BK322', 'Percikan Revolusi', 'Damar Shashangka', 'Penerbit A', '1899', '100', 'Tersedia', 'Sejarah');
+
+-- No 3
+
+DELIMITER //
+CREATE PROCEDURE UpdateJumlahBuku(IN Kode_BukuParam VARCHAR(100), IN Jenis_Transaksi VARCHAR(10))
+BEGIN
+    IF Jenis_Transaksi = 'peminjaman' THEN
+        UPDATE buku SET Jumlah_Buku = Jumlah_Buku - 1 WHERE Kode_Buku = Kode_BukuParam;
+    ELSEIF Jenis_Transaksi = 'pengembalian' THEN
+        UPDATE buku SET Jumlah_Buku = Jumlah_Buku + 1 WHERE Kode_Buku = Kode_BukuParam;
+    END IF;
+END//
+DELIMITER ;
+
+CALL UpdateJumlahBuku('BK001', 'peminjaman');
+SELECT * FROM buku
+
+DROP PROCEDURE UpdateJumlahBuku
+
+-- No 4
+
+DELIMITER //
+CREATE PROCEDURE JumlahBukuDipinjam(IN IdAnggotaParam VARCHAR(250), OUT JumlahBukuPinjam INT)
+BEGIN
+    DECLARE jumlahPeminjaman INT;
+    DECLARE jumlahPengembalian INT;
+    
+    SELECT COUNT(*) INTO jumlahPeminjaman 
+    FROM peminjaman 
+    WHERE id_anggota = IdAnggotaParam;
+    
+    SELECT COUNT(*) INTO jumlahPengembalian 
+    FROM pengembalian 
+    WHERE id_anggota = IdAnggotaParam;
+    
+    SET JumlahBukuPinjam = jumlahPeminjaman + jumlahPengembalian;
+END//
+DELIMITER ;
+CALL JumlahBukuDipinjam('A001', @Jumlah_Buku_Pinjam);
+SELECT @Jumlah_Buku_Pinjam;
+DROP PROCEDURE JumlahBukuDipinjam
+SELECT * FROM peminjaman;
+
+DROP PROCEDURE JumlahBukuDipinjam
+
+-- No 5
+
+DROP PROCEDURE 
+

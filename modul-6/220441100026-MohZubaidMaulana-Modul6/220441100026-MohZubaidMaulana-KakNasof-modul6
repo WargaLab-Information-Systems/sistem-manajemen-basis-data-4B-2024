@@ -1,0 +1,120 @@
+# Nomor 1
+DELIMITER //
+CREATE PROCEDURE sp_biodata_anggota ()
+BEGIN
+    SELECT 
+        id_anggota AS NIM,
+        nama_anggota AS Nama,
+        Alamat,
+        nomor_telpon AS No_Telepon,
+        jenis_kelamin,
+        Hobi,
+        YEAR(CURDATE()) - YEAR(tanggal_lahir_anggota) - 
+        (DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(tanggal_lahir_anggota, '%m%d')) AS Umur
+    FROM 
+        anggota;
+END //
+DELIMITER ;
+
+CALL sp_biodata_anggota;
+DROP PROCEDURE sp_biodata_anggota
+
+# Nomor 2
+
+DELIMITER //
+CREATE PROCEDURE ReminderPengembalian()
+BEGIN
+    SELECT 
+        a.nama_anggota,
+        p.kode_buku,
+        b.judul_buku,
+        p.tanggal_pinjam,
+        p.tanggal_kembali,
+        CASE 
+            WHEN p.tanggal_kembali < CURDATE() THEN 'Terlambat'
+            WHEN p.tanggal_kembali = CURDATE() THEN 'Hari Ini'
+            ELSE 'Masih Waktu'
+        END AS status_pengembalian
+    FROM pengembalian p
+    JOIN anggota a ON p.id_anggota = a.id_anggota
+    JOIN buku b ON p.kode_buku = b.kode_buku;
+END //
+DELIMITER ;
+ 
+CALL ReminderPengembalian;
+
+#nomor 3
+
+DELIMITER //
+CREATE PROCEDURE CheckDendaMahasiswa(IN id_mahasiswa VARCHAR(10))
+BEGIN
+    DECLARE TotalDenda INT;
+    
+    SELECT COUNT(*) INTO TotalDenda
+    FROM pengembalian
+    WHERE id_anggota = id_mahasiswa AND Denda IS NOT NULL AND Denda <> '';
+    
+    IF TotalDenda > 0 THEN
+        SELECT * 
+        FROM pengembalian
+        WHERE id_anggota = id_mahasiswa AND Denda IS NOT NULL AND Denda <> '';
+    ELSE
+        SELECT 'Mahasiswa tersebut tidak memiliki tanggungan denda.' AS Pesan;
+    END IF;
+END //
+DELIMITER ;
+
+CALL CheckDendaMahasiswa('A001');
+
+#Nomor 4
+DELIMITER //
+
+CREATE PROCEDURE PrintPeminjamanLoop()
+BEGIN
+    DECLARE counter INT DEFAULT 1;
+    
+    WHILE counter <= 10 DO
+        SELECT *
+        FROM peminjaman
+        WHERE kode_peminjaman = counter;
+        SET counter = counter + 1;
+    END WHILE;
+    
+END //
+
+DELIMITER ;
+
+CALL PrintPeminjamanLoop();
+
+drop procedure PrintPeminjamanLoop;
+
+--
+
+DELIMITER//
+CREATE PROCEDURE cetakpeminjaman(IN cetak INT(5))
+BEGIN
+	DECLARE i INT(5);
+	SET i = 1;
+	WHILE i <= cetak DO 
+		SELECT * FROM peminjaman LIMIT cetak;
+		SET i = i + 1;
+	END WHILE; 
+END//
+DELIMITER ;
+CALL cetakpeminjaman(10)
+ 
+drop procedure cetakpeminjaman;
+
+#Nomor 5
+DELIMITER //
+CREATE PROCEDURE HapusAnggotaLakiLaki()
+BEGIN
+    DELETE FROM anggota 
+    WHERE jenis_kelamin = 'Laki-laki' AND status_pinjam = '0';
+END //
+DELIMITER ;
+CALL HapusAnggotaLakiLaki();
+
+SELECT * FROM anggota;
+
+drop procedure HapusAnggotaLakiLaki;
