@@ -1,0 +1,105 @@
+USE rental_mobil;
+
+-- nomor 1 --
+DELIMITER//
+CREATE TRIGGER check_tanggal_pinjam_kembali
+BEFORE INSERT ON PEMINJAMANMOBIL
+FOR EACH ROW
+BEGIN
+-- tanggal rencana kembali tidak boleh lebih awal dari tgl pinjam --
+    IF NEW.TGL_RENCANA_KEMBALI < NEW.TGL_PINJAM THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Tanggal rencana kembali tidak boleh lebih awal dari tanggal pinjam';
+    END IF;
+END//
+DELIMITER;
+
+INSERT INTO PEMINJAMANMOBIL (ID_MOBIL, ID_PELANGGAN, TGL_PINJAM, TGL_RENCANA_KEMBALI) VALUES (3, 3, '2023-05-05', '2023-05-04');
+
+DROP TRIGGER check_tanggal_pinjam_kembali
+
+
+-- nomor 2 --
+SELECT * FROM PEMINJAMANMOBIL
+
+-- Trigger untuk menghitung total_bayar dan denda saat mobil dikembalikan
+DELIMITER //
+
+CREATE TRIGGER update_pengembalian
+BEFORE UPDATE ON PEMINJAMANMOBIL
+FOR EACH ROW
+BEGIN
+    DECLARE TOTAL_DAYS INT;
+    DECLARE SEWA_PERHARI DECIMAL(10, 2);
+    DECLARE KETERLAMBATAN INT;
+    DECLARE DENDA_PERHARI DECIMAL(10, 2);
+    
+    -- Pastikan bahwa ini adalah pembaruan pertama pada kolom TGL_KEMBALI
+    IF NEW.TGL_KEMBALI <> OLD.TGL_KEMBALI OR NEW.TGL_KEMBALI IS NOT NULL THEN
+        -- Menghitung total hari sewa
+        -- datediff adalah selisih--
+        SET TOTAL_DAYS = DATEDIFF(NEW.TGL_KEMBALI, NEW.TGL_PINJAM);
+        SET NEW.TOTAL_HARI = TOTAL_DAYS;
+        
+        -- Mendapatkan harga sewa per hari
+        -- menampilkan harga sewa perhari memasukkan ke kolom sewa perhari
+        SELECT HARGA_SEWA_PERHARI INTO SEWA_PERHARI FROM MOBIL WHERE ID_MOBIL = NEW.ID_MOBIL;
+        
+        -- Menghitung total bayar
+        SET NEW.TOTAL_BAYAR = TOTAL_DAYS * SEWA_PERHARI;
+        
+        -- Menghitung denda jika ada
+        IF NEW.TGL_KEMBALI > NEW.TGL_RENCANA_KEMBALI THEN
+            SET KETERLAMBATAN = DATEDIFF(NEW.TGL_KEMBALI, NEW.TGL_RENCANA_KEMBALI);
+            SET DENDA_PERHARI = 0.1 * SEWA_PERHARI; -- Denda 10% dari harga sewa per hari
+            SET NEW.DENDA = KETERLAMBATAN * DENDA_PERHARI;
+        ELSE
+            SET NEW.DENDA = 0;
+        END IF;
+    END IF;
+END//
+
+DELIMITER ;
+
+-- Insert data valid ke tabel PEMINJAMAN tanpa mengisi TGL_KEMBALI
+INSERT INTO PEMINJAMANMOBIL (ID_MOBIL, ID_PELANGGAN, TGL_PINJAM, TGL_RENCANA_KEMBALI) VALUES (2, 2, '2023-05-03', '2023-05-07');
+
+-- Update untuk mengisi TGL_KEMBALI dan memicu trigger
+UPDATE PEMINJAMANMOBIL
+SET TGL_KEMBALI = '2023-05-05'
+WHERE ID_PEMINJAMAN = 2; -- Gantilah ID dengan ID yang sesuai dari hasil insert sebelumnya-- Menampilkan isi tabel PEMINJAMANMOBIL setelah pembaruan
+
+SELECT * FROM PEMINJAMANMOBIL;
+
+DROP PROCEDURE update_peminjaman_mobil
+
+
+-- nomor 3 --
+DELIMITER//
+CREATE TRIGGER check_panjang_nik
+BEFORE INSERT ON PELANGGAN
+FOR EACH ROW
+BEGIN
+    IF LENGTH(NEW.NIK) != 16 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Panjang NIK harus 16 digit';
+    END IF;
+END//
+DELIMITER ;
+INSERT INTO PELANGGAN (NAMA, ALAMAT, NIK, NO_TELEPON, JENIS_KELAMIN) VALUES ('Naila Sari', 'Jalan Kemerdekaan No. 20', '12345967891123567', '082345678901', 'P');
+DROP TRIGGER check_panjang_nik
+
+-- nomor 4 --
+DELIMITER//
+CREATE TRIGGER check_platno_awal_huruf
+BEFORE INSERT ON MOBIL
+FOR EACH ROW
+BEGIN
+    IF(NEW.PLATNO NOT REGEXP '[a-zA-Z]') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Pada kolom PLATNO, karakter awal harus berupa huruf';
+    END IF;
+END//
+DELIMITER ;
+INSERT INTO MOBIL (PLATNO, MERK, JENIS, HARGA_SEWA_PERHARI) VALUES ('7890', 'Mitsubishi', 'Xpander', 50000);
+DROP TRIGGER check_platno_awal_huruf

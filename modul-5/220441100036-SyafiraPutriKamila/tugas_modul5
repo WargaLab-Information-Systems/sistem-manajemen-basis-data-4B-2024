@@ -1,0 +1,88 @@
+USE dbperpustakaan1;
+
+-- nomor 1 --
+DELIMITER //
+CREATE PROCEDURE HitungUmurBuku(
+    IN KodeBukuInput VARCHAR(10),
+    OUT UmurBuku INT
+)
+BEGIN
+    DECLARE TahunPenerbit INT;
+    
+    -- Mengambil tahun penerbitan buku
+    SELECT tahun_buku INTO TahunPenerbit
+    FROM buku
+    WHERE kode_buku = KodeBukuInput;
+    
+    -- Menghitung umur buku
+    SET UmurBuku = YEAR(CURRENT_DATE()) - TahunPenerbit;
+    
+END // 
+DELIMITER ;
+
+CALL HitungUmurBuku('B102', @UmurBuku);
+SELECT @UmurBuku AS 'Umur_Buku_dalam_Tahun';
+
+SELECT * FROM buku
+
+-- nomor 2 --
+DELIMITER //
+CREATE PROCEDURE DeleteBukuLama()
+BEGIN
+    DELETE FROM peminjaman WHERE Kode_Buku IN (
+    SELECT Kode_Buku FROM buku WHERE Tahun_Buku  < 2000 AND Penerbit_Buku != 'AndhiPublisher');
+    
+    DELETE FROM buku WHERE Tahun_Buku < 2000 AND Penerbit_Buku != 'AndhiPublisher';
+    
+END//
+DELIMITER ;
+
+CALL DeleteBukuLama();
+SELECT * FROM buku
+
+-- nomor 3 --
+DELIMITER //
+CREATE PROCEDURE UpdateJumlahBuku(IN kodebuku VARCHAR(100), IN Jenis_Transaksi VARCHAR(10))
+BEGIN
+-- jika transaksi termasuk peminjaman maka jml buku dikurangi 1--
+    IF Jenis_Transaksi = 'peminjaman' THEN
+        UPDATE buku SET Jumlah_Buku = Jumlah_Buku - 1 WHERE Kode_Buku = kodebuku;
+-- jika transaksi termasuk pengembalian maka jml buku ditambah 1--
+    ELSEIF Jenis_Transaksi = 'pengembalian' THEN
+        UPDATE buku SET Jumlah_Buku = Jumlah_Buku + 1 WHERE Kode_Buku = kodebuku;
+    END IF;
+END//
+DELIMITER ;
+
+CALL UpdateJumlahBuku('B102', 'peminjaman');
+SELECT * FROM buku
+
+-- nomor 4 --
+DELIMITER //
+CREATE PROCEDURE JumlahBukuDipinjam(IN id_anggota VARCHAR(250), OUT JumlahBukuPinjam INT)
+BEGIN
+    DECLARE jumlahPeminjaman INT;
+    DECLARE jumlahPengembalian INT;
+    
+    SELECT COUNT(*) INTO jumlahPeminjaman 
+    FROM peminjaman 
+    WHERE IdAnggota = id_anggota;
+    
+    SELECT COUNT(*) INTO jumlahPengembalian 
+    FROM pengembalian 
+    WHERE IdAnggota = id_anggota;
+    
+    SET JumlahBukuPinjam = jumlahPeminjaman + jumlahPengembalian;
+END//
+DELIMITER ;
+
+CALL JumlahBukuDipinjam('A101', @Jumlah_Buku_Pinjam);
+SELECT @Jumlah_Buku_Pinjam;
+SELECT * FROM peminjaman;
+SELECT * FROM pengembalian;
+
+-- nomor 5 --
+DROP PROCEDURE HitungUmurBuku
+DROP PROCEDURE DeleteBukuLama
+DROP PROCEDURE UpdateJumlahBuku
+DROP PROCEDURE JumlahBukuDipinjam
