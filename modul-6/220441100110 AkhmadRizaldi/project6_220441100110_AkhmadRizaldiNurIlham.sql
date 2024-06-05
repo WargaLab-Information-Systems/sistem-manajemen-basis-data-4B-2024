@@ -1,0 +1,228 @@
+CREATE DATABASE praktikum5;
+USE praktikum5
+
+CREATE TABLE buku (
+kode_buku VARCHAR (10) PRIMARY KEY,
+judul_buku VARCHAR (25) NOT NULL ,
+pengarang_buku VARCHAR (30) NOT NULL,
+penrbit_buku VARCHAR (30) NOT NULL,
+tahun_buku VARCHAR (10) NOT NULL ,
+jumlah_buku VARCHAR (5) NOT NULL ,
+status_buku VARCHAR (10) NOT NULL,
+klasifikasi_buku VARCHAR (20) NOT NULL
+);
+
+INSERT INTO buku (kode_buku, judul_buku, pengarang_buku, penrbit_buku, tahun_buku, jumlah_buku, status_buku, klasifikasi_buku) VALUES
+('B001', 'The Hobbit', 'J.R.R. Tolkien', 'Allen & Unwin', '1937', '50', 'Available', 'Fantasy'),
+('B002', 'Pride and Prejudice', 'Jane Austen', 'T. Egerton, Whitehall', '1813', '40', 'Available', 'Classic'),
+('B003', 'The Hunger Games', 'Suzanne Collins', 'Scholastic Corporation', '2008', '65', 'Available', 'Dystopian'),
+('B004', 'The Da Vinci Code', 'Dan Brown', 'Doubleday', '2003', '55', 'Available', 'Thriller'),
+('B005', 'The Alchemist', 'Paulo Coelho', 'HarperCollins', '1988', '70', 'Available', 'Philosophical Fiction');
+SELECT * FROM buku ;
+
+CREATE TABLE petugas (
+    id_petugas VARCHAR(10) PRIMARY KEY,
+    username VARCHAR(15) NOT NULL,
+    paswordd VARCHAR(15) NOT NULL,
+    nama VARCHAR(25) NOT NULL
+);
+
+INSERT INTO petugas (id_petugas, username, paswordd, nama) VALUES
+('P001', 'john_doe', 'password123', 'John Doe'),
+('P002', 'jane_smith', 'qwerty', 'Jane Smith'),
+('P003', 'admin', 'admin123', 'Administrator'),
+('P004', 'petugas1', '123456', 'Petugas Satu'),
+('P005', 'petugas2', 'password', 'Petugas Dua');
+
+
+CREATE TABLE anggota (
+id_anggota VARCHAR (10) PRIMARY KEY ,
+nama_anggota VARCHAR (20) NOT NULL,
+angkatan_anggota VARCHAR (6) NOT NULL,
+tempat_lahir_anggota VARCHAR (20) NOT NULL,
+tanggal_lahir_anggota DATE NOT NULL,
+no_telp INT (12) NOT NULL,
+jenis_kelamin VARCHAR (15) NOT NULL,
+status_pinjam VARCHAR (15) NOT NULL
+);
+INSERT INTO anggota (id_anggota, nama_anggota, angkatan_anggota, tempat_lahir_anggota, tanggal_lahir_anggota, no_telp, jenis_kelamin, status_pinjam) VALUES
+('A001', 'Andi', '2020', 'Jakarta', '2000-05-15', 1234567890, 'Laki-laki', 'Tidak meminjam'),
+('A002', 'Budi', '2019', 'Surabaya', '1999-10-20', 9876543210, 'Laki-laki', 'Tidak meminjam'),
+('A005', 'Eka', '2022', 'Semarang', '2002-12-05', 3698521470, 'Laki-laki', 'Tidak meminjam');
+
+
+CREATE TABLE peminjaman (
+kode_peminjaman VARCHAR (10) PRIMARY KEY ,
+id_anggota VARCHAR (10) NOT NULL ,
+id_petugas VARCHAR (10) NOT NULL ,
+tanggal_pinjam DATE NOT NULL ,
+tanggal_kembali DATE NOT NULL ,
+kode_buku VARCHAR (10) NOT NULL
+);
+INSERT INTO peminjaman (kode_peminjaman, id_anggota, id_petugas, tanggal_pinjam, tanggal_kembali, kode_buku) VALUES
+('P001', 'A001', 'P0001', '2022-05-01', '2022-05-08', 'B001'),
+('P002', 'A002', 'P002', '2022-05-02', '2022-05-09', 'B002'),
+('P003', 'A003', 'P003', '2022-05-03', '2022-05-10', 'B003'),
+('P004', 'A004', 'P004', '2022-05-04', '2022-05-11', 'B004'),
+('P005', 'A005', 'P005', '2022-05-05', '2022-05-12', 'B005'),
+('P006', 'A001', 'P0021', '2022-05-01', '2022-05-08', 'B001'),
+('P007', 'A002', 'P002', '2022-05-02', '2022-05-09', 'B002'),
+('P008', 'A003', 'P003', '2022-05-03', '2022-05-10', 'B003'),
+('P009', 'A004', 'P004', '2022-05-04', '2022-05-11', 'B004'),
+('P0010', 'A005', 'P005', '2022-05-05', '2022-05-12', 'B005'),
+('P011', 'A005', 'P005', '2022-05-05', '2022-05-12', 'B005');
+
+
+CREATE TABLE pengembalian (
+kode_kembali VARCHAR (10) PRIMARY KEY ,
+id_anggota VARCHAR (10) NOT NULL ,
+kode_buku VARCHAR (10) NOT NULL ,
+id_petugas VARCHAR (10) NOT NULL ,
+tanggal_pinjam DATE NOT NULL ,
+tanggal_kembali DATE NOT NULL ,
+denda VARCHAR (15) NOT NULL
+);
+INSERT INTO pengembalian (kode_kembali, id_anggota, kode_buku, id_petugas, tanggal_pinjam, tanggal_kembali, denda) VALUES
+('K001', 'A001', 'B001', 'P001', '2022-05-01', '2022-05-08', '0'),
+('K002', 'A002', 'B002', 'P002', '2022-05-02', '2022-05-09', '0'),
+('K003', 'A003', 'B003', 'P003', '2022-05-03', '2022-05-10', '0'),
+('K004', 'A004', 'B004', 'P004', '2022-05-04', '2022-05-11', '0'),
+('K005', 'A005', 'B005', 'P005', '2022-05-05', '2022-05-12', '0');
+
+praktikum 6//
+1//
+DELIMITER //
+CREATE PROCEDURE biodatadiri ( IN vnama VARCHAR (50),
+IN vnrp VARCHAR (20),
+IN valamat VARCHAR (50), IN vtgl_lahir DATE,
+IN vjenis_kelamin VARCHAR(10), IN vumur INT (5),
+IN vhobi VARCHAR (50),
+IN vno_telp VARCHAR(15)
+) 
+BEGIN
+DECLARE nama VARCHAR (50); 
+DECLARE nrp VARCHAR(20); DECLARE alamat VARCHAR (50);
+DECLARE tgl_lahir DATE;
+DECLARE jenis_kelamin VARCHAR(10); 
+DECLARE umur INT (5);
+DECLARE hobi VARCHAR (50); 
+DECLARE no_telp VARCHAR(15);
+
+SET nama = vnama; 
+SET nrp = vnrp;
+SET alamat = valamat; 
+SET tgl_lahir = vtgl_lahir;
+SET jenis_kelamin = vjenis_kelamin;
+SET	umur	=	TIMESTAMPDIFF(YEAR,	vtgl_lahir, CURDATE());
+SET hobi = vhobi;
+SET no_telp = vno_telp;
+
+
+SELECT
+nama AS Nama_Mahasiswa, nrp AS NIM,
+alamat AS Alamat, tgl_lahir AS Tgl_lahir, jenis_kelamin AS Gender, umur AS Usia,
+hobi AS Hobi, no_telp AS No_Tlp;
+END // 
+DELIMITER ;
+CALL biodatadiri ("Seila Ardiana","220441100061","Malang","2004-07-12","Perempuan","19","Menyanyi","081233347957");
+
+
+2//
+DELIMITER //
+
+CREATE PROCEDURE peringatan()
+BEGIN
+    SELECT
+        kode_kembali,
+        id_anggota,
+        tanggal_pinjam,
+        tanggal_kembali,
+        DATEDIFF(tanggal_kembali, tanggal_pinjam) AS lama_pinjam,
+        CASE
+            WHEN DATEDIFF(tanggal_kembali, tanggal_pinjam) <= 2 THEN 'Silahkan Pergunakan Buku'
+            WHEN DATEDIFF(tanggal_kembali, tanggal_pinjam) BETWEEN 3 AND 5 THEN 'Ingat!!, Waktu Pinjam Segera Habis'
+            WHEN DATEDIFF(tanggal_kembali, tanggal_pinjam) >= 6 THEN 'WARNING!!, Denda Menanti Anda'
+        END AS Statusnya
+    FROM pengembalian
+    ORDER BY lama_pinjam ASC;
+END //
+
+DELIMITER ;
+CALL  peringatan ();
+CALL peringatan ('2022-05-01', '2022-05-03')
+
+3//
+DELIMITER//
+CREATE PROCEDURE denda (
+IN idanggota VARCHAR(10)) 
+BEGIN
+DECLARE jumlah_denda VARCHAR (50);
+	IF ((SELECT SUM(denda)	FROM	pengembalian	WHERE id_anggota = idanggota) !=0) THEN
+	SET jumlah_denda = (SELECT SUM(denda) FROM pengembalian WHERE id_anggota=idanggota);
+	ELSE
+	SET	jumlah_denda ='Anda	tidak	memiliki tanggungan/denda';
+	END IF;
+	SELECT jumlah_denda;
+END// 
+DELIMITER;
+CALL denda('1015');
+CALL denda ('A001');
+
+
+4//
+DELIMITER//
+CREATE PROCEDURE cetak_pinjam (IN bil INT (10)) 
+BEGIN
+DECLARE i INT DEFAULT 0;
+
+
+WHILE i<= bil DO
+SELECT * FROM peminjaman; 
+SET i = i + 1;
+END WHILE;
+END//
+DELIMITER;
+CALL cetak_pinjam(10);
+--------------------------------------------------
+DELIMITER//
+CREATE PROCEDURE cetak_pinjamm (IN bil INT (10)) 
+BEGIN
+DECLARE i INT DEFAULT 0;
+
+
+WHILE i<= bil DO
+SELECT * FROM peminjaman; 
+SET i = i + 2;
+END WHILE;
+END//
+DELIMITER;
+CALL cetak_pinjamm(7);
+----------------------------------------
+DELIMITER//
+CREATE PROCEDURE cetak_pinjammm (IN bil INT (10)) 
+BEGIN
+DECLARE i INT DEFAULT 0;
+
+WHILE i<= bil DO
+SELECT * FROM peminjaman; 
+SET i = i + 2;
+END WHILE;
+END//
+DELIMITER;
+CALL cetak_pinjammm(7);
+
+5//
+DELIMITER//
+CREATE PROCEDURE hapus (IN jk VARCHAR (20)) 
+BEGIN
+IF jk = 'Laki-laki' THEN DELETE FROM anggota WHERE jenis_kelamin='Laki-laki'
+AND status_pinjam != '0'; 
+END IF;
+END// 
+DELIMITER;
+CALL hapus ('Laki-laki'); 
+INSERT INTO anggota (id_anggota, nama_anggota, angkatan_anggota, tempat_lahir_anggota, tanggal_lahir_anggota, no_telp, jenis_kelamin, status_pinjam) VALUES
+('A006', 'Andii', '2020', 'Jakarta', '2000-05-15', 1234567890, 'Laki-laki', 'meminjam')
+
+
+SELECT * FROM anggota
